@@ -10,6 +10,9 @@
 #import "AvoidCrash.h"
 #import "AvoidCrashStubProxy.h"
 
+// 持久化存储的Key
+static NSString *const kPersistedProtectedClassesKey = @"AvoidCrash_PersistedClasses";
+
 @implementation NSObject (AvoidCrash)
 
 
@@ -35,6 +38,10 @@
             [AvoidCrash exchangeInstanceMethod:[self class] method1Sel:@selector(methodSignatureForSelector:) method2Sel:@selector(avoidCrashMethodSignatureForSelector:)];
             [AvoidCrash exchangeInstanceMethod:[self class] method1Sel:@selector(forwardInvocation:) method2Sel:@selector(avoidCrashForwardInvocation:)];
         }
+        
+        //
+        _protectedClasses = [NSMutableSet set];
+        [self loadPersistedProtectedClasses];
     });
 }
 
@@ -47,6 +54,7 @@
 
 static NSMutableArray *noneSelClassStrings;
 static NSMutableArray *noneSelClassStringPrefixs;
+static NSMutableSet *_protectedClasses;  // 保护的类集合
 
 + (void)setupNoneSelClassStringsArr:(NSArray<NSString *> *)classStrings {
     
@@ -99,11 +107,82 @@ static NSMutableArray *noneSelClassStringPrefixs;
     });
 }
 
+#pragma mark --- 从异常信息中提取并注册需要防护的类
++ (void)registerProtectedClassFromException:(NSException *)exception
+{
+    // -[ClassA methodA]: unrecognized selector sent to instance 0x60000000c4f0
+    NSString *reason = exception.reason;
+    if (![reason containsString:@"unrecognized selector sent to"]) return;
+    
+    // 匹配两种格式：
+    // 1. 实例方法: -[ClassName selector]
+    // 2. 类方法:   +[ClassName selector]
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[\\+\\-]\\[(\\w+)\\s" options:0 error:nil];
+    NSTextCheckingResult *match = [regex firstMatchInString:reason options:0 range:NSMakeRange(0, reason.length)];
+    
+    if (match && match.numberOfRanges >= 2) {
+        NSString *className = [reason substringWithRange:[match rangeAtIndex:1]];
+        Class cls = NSClassFromString(className);
+        
+        if (cls) {
+            [self addProtectedClass:cls];
+            NSLog(@"AvoidCrash 从崩溃信息注册防护类: %@ (%@)", className, [reason containsString:@"+["] ? @"类方法" : @"实例方法");
+        }
+    }
+}
+
++ (void)addProtectedClass:(Class)aClass {
+    if (_protectedClasses && aClass) {
+        // 防止重复添加
+        if (![_protectedClasses containsObject:aClass]) {
+            [_protectedClasses addObject:aClass];
+            [self persistProtectedClasses]; // 添加后立即持久化
+            NSLog(@"AvoidCrash 添加并持久化防护类: %@", NSStringFromClass(aClass));
+        }
+    }
+}
+
+#pragma mark --- 持久化相关方法
++ (void)persistProtectedClasses {
+    NSArray *classNames = [_protectedClasses.allObjects valueForKey:@"description"];
+    [[NSUserDefaults standardUserDefaults] setObject:classNames forKey:kPersistedProtectedClassesKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (void)loadPersistedProtectedClasses {
+    NSArray *classNames = [[NSUserDefaults standardUserDefaults] objectForKey:kPersistedProtectedClassesKey];
+    
+    [classNames enumerateObjectsUsingBlock:^(NSString *className, NSUInteger idx, BOOL *stop) {
+        Class cls = NSClassFromString(className);
+        if (cls) {
+            [_protectedClasses addObject:cls];
+        }
+    }];
+    
+    if (classNames.count > 0) {
+        NSLog(@"%@", [NSString stringWithFormat:@"AvoidCrash 加载持久化防护类: %@", classNames]);
+    }
+}
+
++ (void)resetPersistedProtectedClasses {
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kPersistedProtectedClassesKey];
+    [_protectedClasses removeAllObjects];
+    NSLog(@"AvoidCrash 已清空持久化防护类");
+}
+
 - (NSMethodSignature *)avoidCrashMethodSignatureForSelector:(SEL)aSelector {
     
     NSMethodSignature *ms = [self avoidCrashMethodSignatureForSelector:aSelector];
     
     BOOL flag = NO;
+    
+    if (ms == nil) {
+        if ([_protectedClasses containsObject:[self class]]) {
+            ms = [AvoidCrashStubProxy instanceMethodSignatureForSelector:@selector(proxyMethod)];
+            flag = YES;
+        }
+    }
+    
     if (ms == nil) {
         for (NSString *classStr in noneSelClassStrings) {
             if ([self isKindOfClass:NSClassFromString(classStr)]) {
@@ -113,6 +192,7 @@ static NSMutableArray *noneSelClassStringPrefixs;
             }
         }
     }
+    
     if (flag == NO) {
         NSString *selfClass = NSStringFromClass([self class]);
         for (NSString *classStrPrefix in noneSelClassStringPrefixs) {

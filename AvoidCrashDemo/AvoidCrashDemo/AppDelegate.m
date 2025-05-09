@@ -18,8 +18,23 @@
 
 @implementation AppDelegate
 
+// 全局异常处理
+void RegisterExceptionHandler(void) {
+    NSSetUncaughtExceptionHandler(&HandleException);
+}
+
+void HandleException(NSException *exception) {
+    // 解析并注册需要防护的类
+    [AvoidCrash registerProtectedClassFromException:exception];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    // 注册异常处理器 --- Haomissyou 2025-05-09 10:56:51
+    RegisterExceptionHandler();
+    
+    // 清空持久化防护的类，根据需求，调用
+    //[AvoidCrash resetPersistedProtectedClasses];
     
     /*
      *  [AvoidCrash becomeEffective]、[AvoidCrash makeAllEffective]

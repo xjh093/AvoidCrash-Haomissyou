@@ -15,4 +15,6 @@
 
 - (instancetype)initWithName:(NSString *)name age:(NSInteger)age height:(float)height weight:(float)weight;
 
+- (void)run;
+
 @end

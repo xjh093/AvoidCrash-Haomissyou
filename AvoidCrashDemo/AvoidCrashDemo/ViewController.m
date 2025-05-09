@@ -10,6 +10,7 @@
 
 #import "Person.h"
 #import "AvoidCrashPerson.h"
+#import "Dog.h"
 
 @interface ViewController ()
 
@@ -23,9 +24,43 @@
     
     [self executeAllTestMethod];
     
-    
+    //
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.frame = CGRectMake(0, 0, 300, 60);
+    button.backgroundColor = [UIColor lightGrayColor];
+    button.titleLabel.font = [UIFont systemFontOfSize:20];
+    [button setTitle:@"unrecoganized selector Test" forState:0];
+    [button setTitleColor:[UIColor blackColor] forState:0];
+    [button addTarget:self action:@selector(buttonAction) forControlEvents:1<<6];
+    [self.view addSubview:button];
+    button.center = self.view.center;
 }
 
+- (void)buttonAction
+{
+    /*
+     首次会崩溃，下次会防护!
+     
+     崩溃后，添加相关的类，防止下次再崩溃
+     AvoidCrash 添加并持久化防护类: Person
+     AvoidCrash 从崩溃信息注册防护类: Person (实例方法)
+     
+     AvoidCrash 添加并持久化防护类: Dog
+     AvoidCrash 从崩溃信息注册防护类: Dog (实例方法)
+     
+     下次启动应用时：
+     AvoidCrash 加载持久化防护类: (
+         Person
+     )
+     */
+    
+    
+    Person *p = [[Person alloc] init];
+    [p run];
+    
+//    Dog *d = [[Dog alloc] init];
+//    [d sleep];
+}
 
 //=================================================================
 //                         NSArray_Test

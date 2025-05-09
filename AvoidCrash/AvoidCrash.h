@@ -90,6 +90,11 @@
 
 
 
+// 从异常信息中提取并注册需要防护的类
++ (void)registerProtectedClassFromException:(NSException *)exception;
+
+// 清空之前防护的类
++ (void)resetPersistedProtectedClasses;
 
 
 

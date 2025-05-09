@@ -63,6 +63,15 @@
 }
 
 
++ (void)registerProtectedClassFromException:(NSException *)exception{
+    [NSObject registerProtectedClassFromException:exception];
+}
+
+// 清空之前防护的类
++ (void)resetPersistedProtectedClasses{
+    [NSObject resetPersistedProtectedClasses];
+}
+
 /**
  *  类方法的交换
  *
