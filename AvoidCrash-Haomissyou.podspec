@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 s.name         = "AvoidCrash-Haomissyou"
 s.platform     = :ios, "7.0"
-s.version      = "2.6.0"
+s.version      = "2.6.1"
 s.summary      = "This framework can avoid Foundation framework potential crash danger"
 s.homepage     = "https://github.com/xjh093/AvoidCrash-Haomissyou"
 s.license      = "MIT"

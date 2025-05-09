@@ -109,3 +109,43 @@ void HandleException(NSException *exception) {
 
 
 @end
+
+/*
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '*** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[1]'
+ *** Terminating app due to uncaught exception 'NSRangeException', reason: '*** -[NSConstantArray objectAtIndexedSubscript:]: index 100 beyond bounds [0 .. 1]'
+ *** Terminating app due to uncaught exception 'NSRangeException', reason: '*** -[NSArray objectsAtIndexes:]: index 100 in index set beyond bounds [0 .. 1]'
+ *** Terminating app due to uncaught exception 'NSRangeException', reason: '*** -[NSConstantArray getObjects:range:]: range {0, 11} extends beyond bounds [0 .. 2]'
+ *** Terminating app due to uncaught exception 'NSRangeException', reason: '*** -[__NSArrayM objectAtIndexedSubscript:]: index 2 beyond bounds [0 .. 0]'
+ *** Terminating app due to uncaught exception 'NSRangeException', reason: '*** -[__NSArrayM setObject:atIndexedSubscript:]: index 3 beyond bounds [0 .. 0]'
+ *** Terminating app due to uncaught exception 'NSRangeException', reason: '*** -[__NSArrayM removeObjectsInRange:]: range {5, 1} extends beyond bounds [0 .. 1]'
+ *** Terminating app due to uncaught exception 'NSRangeException', reason: '*** -[__NSArrayM insertObject:atIndex:]: index 5 beyond bounds [0 .. 0]'
+ *** Terminating app due to uncaught exception 'NSRangeException', reason: '*** -[__NSArrayM getObjects:range:]: range {0, 11} extends beyond bounds [0 .. 1]'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '*** -[__NSPlaceholderDictionary initWithObjects:forKeys:count:]: attempt to insert nil object from objects[1]'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '*** -[__NSDictionaryM setObject:forKeyedSubscript:]: key cannot be nil'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '*** -[__NSDictionaryM setObject:forKey:]: key cannot be nil'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '*** -[__NSDictionaryM removeObjectForKey:]: key cannot be nil'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[__NSCFConstantString characterAtIndex:]: Range or index out of bounds'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[__NSCFConstantString characterAtIndex:]: Range or index out of bounds'
+ *** Terminating app due to uncaught exception 'NSRangeException', reason: '*** -[__NSCFConstantString substringFromIndex:]: Index 100 out of bounds; string length 11'
+ *** Terminating app due to uncaught exception 'NSRangeException', reason: '*** -[__NSCFConstantString substringToIndex:]: Index 100 out of bounds; string length 11'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[__NSCFConstantString substringWithRange:]: Range {0, 100} out of bounds; string length 11'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '*** -[__NSCFConstantString stringByReplacingOccurrencesOfString:withString:options:range:]: nil argument'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[__NSCFString replaceOccurrencesOfString:withString:options:range:]: Range {0, 1000} out of bounds; string length 11'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[__NSCFString replaceCharactersInRange:withString:]: Range or index out of bounds'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[__NSCFString replaceCharactersInRange:withString:]: Range or index out of bounds'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[__NSCFString insertString:atIndex:]: Range or index out of bounds'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[__NSCFString deleteCharactersInRange:]: Range or index out of bounds'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: 'NSConcreteAttributedString initWithString:: nil value'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: 'NSConcreteAttributedString initWithString:: nil value'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: 'NSConcreteAttributedString initWithString:: nil value'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: 'NSConcreteMutableAttributedString initWithString:: nil value'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: 'NSConcreteMutableAttributedString initWithString:attributes:: nil value'
+ *** Terminating app due to uncaught exception 'NSUnknownKeyException', reason: '[<UITableView 0x10302ec00> setValue:forUndefinedKey:]: this class is not key value coding-compliant for the key AvoidCrash.'
+ *** Terminating app due to uncaught exception 'NSUnknownKeyException', reason: '[<UITableView 0x104018000> setValue:forUndefinedKey:]: this class is not key value coding-compliant for the key AvoidCrash.'
+ *** Terminating app due to uncaught exception 'NSUnknownKeyException', reason: '[<UITableView 0x10982a200> setValue:forUndefinedKey:]: this class is not key value coding-compliant for the key name.'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[__NSCFConstantString sleep]: unrecognized selector sent to instance 0x102d2c0f0'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[Dog objectForKey:]: unrecognized selector sent to instance 0x6000000142f0'
+ *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[Dog sleep]: unrecognized selector sent to instance 0x60000000c0f0'
+ *** Terminating app due to uncaught exception 'NSRangeException', reason: '*** -[NSConstantArray getObjects:range:]: range {0, 11} extends beyond bounds [0 .. 2]'
+ */
+

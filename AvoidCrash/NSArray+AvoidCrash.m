@@ -34,6 +34,7 @@
         Class __NSArrayI = NSClassFromString(@"__NSArrayI");
         Class __NSSingleObjectArrayI = NSClassFromString(@"__NSSingleObjectArrayI");
         Class __NSArray0 = NSClassFromString(@"__NSArray0");
+        Class __NSConstantArray = NSClassFromString(@"NSConstantArray");
         
         
         //objectsAtIndexes:
@@ -51,6 +52,10 @@
         //objectAtIndexedSubscript:
         if (AvoidCrashIsiOS(11.0)) {
             [AvoidCrash exchangeInstanceMethod:__NSArrayI method1Sel:@selector(objectAtIndexedSubscript:) method2Sel:@selector(__NSArrayIAvoidCrashObjectAtIndexedSubscript:)];
+            
+            if (__NSConstantArray) {
+                [AvoidCrash exchangeInstanceMethod:__NSConstantArray method1Sel:@selector(objectAtIndexedSubscript:) method2Sel:@selector(__NSConstantArrayAvoidCrashObjectAtIndexedSubscript:)];
+            }
         }
         
         
@@ -60,6 +65,10 @@
         [AvoidCrash exchangeInstanceMethod:__NSSingleObjectArrayI method1Sel:@selector(getObjects:range:) method2Sel:@selector(__NSSingleObjectArrayIAvoidCrashGetObjects:range:)];
         
         [AvoidCrash exchangeInstanceMethod:__NSArrayI method1Sel:@selector(getObjects:range:) method2Sel:@selector(__NSArrayIAvoidCrashGetObjects:range:)];
+        
+        if (__NSConstantArray) {
+            [AvoidCrash exchangeInstanceMethod:__NSConstantArray method1Sel:@selector(getObjects:range:) method2Sel:@selector(__NSConstantArrayAvoidCrashGetObjects:range:)];
+        }
     });
     
     
@@ -121,6 +130,21 @@
         return object;
     }
 
+}
+
+- (id)__NSConstantArrayAvoidCrashObjectAtIndexedSubscript:(NSUInteger)idx {
+    id object = nil;
+    
+    @try {
+        object = [self __NSConstantArrayAvoidCrashObjectAtIndexedSubscript:idx];
+    }
+    @catch (NSException *exception) {
+        NSString *defaultToDo = AvoidCrashDefaultReturnNil;
+        [AvoidCrash noteErrorWithException:exception defaultToDo:defaultToDo];
+    }
+    @finally {
+        return object;
+    }
 }
 
 
@@ -252,7 +276,19 @@
     }
 }
 
-
-
+//__NSConstantArray  getObjects:range:
+- (void)__NSConstantArrayAvoidCrashGetObjects:(__unsafe_unretained id  _Nonnull *)objects range:(NSRange)range {
+    
+    @try {
+        [self __NSConstantArrayAvoidCrashGetObjects:objects range:range];
+    } @catch (NSException *exception) {
+        
+        NSString *defaultToDo = AvoidCrashDefaultIgnore;
+        [AvoidCrash noteErrorWithException:exception defaultToDo:defaultToDo];
+        
+    } @finally {
+        
+    }
+}
 
 @end
